@@ -12,6 +12,8 @@ Permite seleccionar diferentes radios mediante botones físicos conectados a los
 2. Actualizar el sistema:
    ```bash
    sudo apt update
+     ```
+     ```bash
    sudo apt upgrade -y
    ```
 
