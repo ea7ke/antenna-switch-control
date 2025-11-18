@@ -1,0 +1,57 @@
+#!/bin/bash
+echo "Content-type: text/html"
+echo ""
+
+source /etc/gpio_config.sh
+
+# Función para decodificar datos URL
+urldecode() { : "${*//+/ }"; echo -e "${_//%/\\x}"; }
+
+if [ "$REQUEST_METHOD" = "POST" ]; then
+  read -n $CONTENT_LENGTH POST_DATA
+  echo "POST_DATA=$POST_DATA" >> /tmp/config_debug.log
+
+  echo "#!/bin/bash" > /tmp/gpio_config_new.sh
+  echo "R1=(${R1[@]})" >> /tmp/gpio_config_new.sh
+  echo "R2=(${R2[@]})" >> /tmp/gpio_config_new.sh
+
+  echo "declare -A PAIRS=(" >> /tmp/gpio_config_new.sh
+  for P in "${R1[@]}"; do
+    PAIR_RAW=$(echo "$POST_DATA" | sed -n "s/.*pair$P=\([0-9]*\).*/\1/p")
+    PAIR=$(urldecode "$PAIR_RAW")
+    echo "  [$P]=$PAIR" >> /tmp/gpio_config_new.sh
+    echo "  [$PAIR]=$P" >> /tmp/gpio_config_new.sh
+  done
+  echo ")" >> /tmp/gpio_config_new.sh
+
+  echo "declare -A NAMES=(" >> /tmp/gpio_config_new.sh
+  for P in "${R1[@]}"; do
+    NAME_RAW=$(echo "$POST_DATA" | sed -n "s/.*name$P=\([^&]*\).*/\1/p")
+    NAME=$(urldecode "$NAME_RAW")
+    echo "  [$P]=\"$NAME\"" >> /tmp/gpio_config_new.sh
+  done
+  echo ")" >> /tmp/gpio_config_new.sh
+
+  echo "for P in \"\${R1[@]}\"; do PAR=\${PAIRS[\$P]}; NAMES[\$PAR]=\"\${NAMES[\$P]} (R2)\"; done" >> /tmp/gpio_config_new.sh
+
+  mv /tmp/gpio_config_new.sh /etc/gpio_config.sh
+
+  echo "<p style='color:green;font-weight:bold'>✅ Configuración actualizada</p>"
+fi
+
+echo "<!DOCTYPE html>"
+echo "<html><head><meta charset='UTF-8'><title>Configuración GPIO</title>"
+echo "<style>table{border-collapse:collapse;width:80%}th,td{border:1px solid #ccc;padding:8px;text-align:center}th{background:#f2f2f2}input{width:90%}</style>"
+echo "</head><body><h1>Configuración de GPIOs</h1>"
+echo "<form method='POST'><table>"
+echo "<tr><th>GPIO</th><th>Nombre</th><th>Grupo</th><th>Par</th></tr>"
+
+for P in "${R1[@]}"; do
+  echo "<tr><td>$P</td><td><input type='text' name='name$P' value='${NAMES[$P]}'></td><td>R1</td><td><input type='number' name='pair$P' value='${PAIRS[$P]}'></td></tr>"
+done
+
+for P in "${R2[@]}"; do
+  echo "<tr><td>$P</td><td><input type='text' disabled value='${NAMES[$P]}'></td><td>R2 (auto)</td><td>${PAIRS[$P]}</td></tr>"
+done
+
+echo "</table><br><input type='submit' value='Guardar cambios'></form></body></html>"

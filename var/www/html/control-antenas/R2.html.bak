@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Panel R2</title>
+  <style>
+    button { width:150px; height:50px; margin:5px; }
+    .on { background-color:green; color:white; }
+    .off { background-color:lightgray; color:black; }
+  </style>
+</head>
+<body>
+  <h1>Panel R2</h1>
+  <h2>Control de R2</h2>
+  <div id="R2"></div>
+
+  <h2>Estado de R1</h2>
+  <div id="R1"></div>
+
+<script>
+function sendAction(pin) {
+  // Acción sobre un GPIO de R2
+  fetch(`/cgi-bin/relay.cgi?pin=${pin}&view=R2`)
+    .then(r => r.json())
+    .then(updateUI);
+}
+
+function updateUI(data) {
+  // Renderizar R2 con botones activos
+  let r2html = '';
+  for (let pin in data.R2) {
+    let obj = data.R2[pin];
+    r2html += `<button onclick="sendAction(${pin})" class="${obj.state==1?'on':'off'}">${obj.name}</button>`;
+  }
+  document.getElementById('R2').innerHTML = r2html;
+
+  // Renderizar R1 en modo lectura
+  let r1html = '';
+  for (let pin in data.R1) {
+    let obj = data.R1[pin];
+    r1html += `<button disabled class="${obj.state==1?'on':'off'}">${obj.name}</button>`;
+  }
+  document.getElementById('R1').innerHTML = r1html;
+}
+
+// Actualizar cada 2 segundos automáticamente
+setInterval(() => {
+  fetch('/cgi-bin/relay.cgi?view=R2')
+    .then(r => r.json())
+    .then(updateUI);
+}, 2000);
+
+// Cargar inicial
+fetch('/cgi-bin/relay.cgi?view=R2')
+  .then(r => r.json())
+  .then(updateUI);
+</script>
+</body>
+</html>

@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Panel Radio 1</title>
+  <style>
+    button {
+      width: 150px;
+      height: 40px;
+      margin: 5px;
+      font-size: 14px;
+    }
+    .active { background-color: green; color: white; }
+    .blocked { background-color: darkred; color: white; }
+    .inactive { background-color: lightgray; color: black; }
+  </style>
+</head>
+<body>
+  <h1>Control de Antenas - Radio 1</h1>
+  <div id="buttons"></div>
+
+  <script>
+    const view = "R1";
+
+    function updateUI(data) {
+      const container = document.getElementById("buttons");
+      container.innerHTML = "";
+      const group = data[view];
+      const pairs = data["PAIRS"];
+
+      for (const pin in group) {
+        const btn = document.createElement("button");
+        btn.textContent = group[pin].name;
+        btn.dataset.pin = pin;
+
+        if (group[pin].state == 1) {
+          btn.className = "active";
+        } else if (data["R2"][pairs[pin]].state == 1) {
+          btn.className = "blocked";
+          btn.disabled = true;
+        } else {
+          btn.className = "inactive";
+        }
+
+        btn.onclick = () => toggleRelay(pin);
+        container.appendChild(btn);
+      }
+    }
+
+    function toggleRelay(pin) {
+      fetch(`/cgi-bin/relay.cgi?pin=${pin}&view=${view}`)
+        .then(r => r.json())
+        .then(data => updateUI(data));
+    }
+
+    // Auto-refresh cada 2 segundos
+    setInterval(() => {
+      fetch(`/cgi-bin/relay.cgi?view=${view}`)
+        .then(r => r.json())
+        .then(data => updateUI(data));
+    }, 2000);
+
+    // Cargar estado inicial
+    fetch(`/cgi-bin/relay.cgi?view=${view}`)
+      .then(r => r.json())
+      .then(data => updateUI(data));
+  </script>
+</body>
+</html>
