@@ -1,8 +1,3 @@
-Claro, aquí tienes el **código completo del README.md** listo para copiar y pegar en tu repositorio. Incluye los pasos previos en Raspberry Pi, la instalación, desinstalación, asignación de pines GPIO y la referencia a la imagen del esquema:
-
-```markdown
-# Antenna Switch Control
-
 Sistema de control de conmutador de antenas para Raspberry Pi.  
 Permite seleccionar diferentes radios mediante botones físicos conectados a los pines GPIO y controlar relés desde una interfaz web.
 
@@ -101,12 +96,4 @@ http://<IP-de-tu-RPi>/cgi-bin/
 
 ## 📜 Créditos
 
-Proyecto desarrollado por **EA7KE** para DXFriends y radioaficionados.
-```
-
----
-
-📌 Copia este bloque en tu archivo `README.md` dentro del repositorio.  
-Cuando lo subas con `git add README.md && git commit -m "Actualizado README con instrucciones y GPIO" && git push`, quedará publicado en GitHub.  
-
-👉 ¿Quieres que te prepare también el **diagrama `gpio-diagram.png`** para que lo tengas listo en la carpeta `docs/` y aparezca directamente en el README?
+Proyecto desarrollado por **EA7KE** 
