@@ -30,8 +30,14 @@ Clonar el repositorio y ejecutar el script de instalación:
 
 ```bash
 git clone https://github.com/ea7ke/antenna-switch-control.git
+```
+```bas
 cd antenna-switch-control
+```
+```bas
 chmod +x install.sh uninstall.sh
+```
+```bas
 sudo ./install.sh
 ```
 
