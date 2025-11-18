@@ -60,7 +60,7 @@ sudo tee $APACHE_CONF > /dev/null <<EOL
         Require all granted
     </Directory>
 
-    ScriptAlias /cgi-bin/ /usr/lib/cgi-bin/antenna/
+    ScriptAlias /cgi-bin/antenna/ /usr/lib/cgi-bin/antenna/
     <Directory "/usr/lib/cgi-bin/antenna">
         AllowOverride None
         Options +ExecCGI -MultiViews +SymLinksIfOwnerMatch
