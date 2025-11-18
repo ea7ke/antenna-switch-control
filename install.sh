@@ -14,7 +14,7 @@ sudo apt install -y apache2 php pigpio
 # 2. Directorios destino
 echo "[2/6] Creando directorios destino..."
 sudo mkdir -p /usr/lib/cgi-bin/antenna
-sudo mkdir -p /var/www/html/
+sudo mkdir -p /var/www/html/antenna
 sudo mkdir -p /etc/antenna
 sudo mkdir -p /usr/local/bin/antenna
 sudo mkdir -p /usr/share/doc/antenna
@@ -24,7 +24,7 @@ echo "[3/6] Copiando archivos..."
 # CGI
 sudo cp -r cgi-bin/* /usr/lib/cgi-bin/antenna/
 # Web
-sudo cp -r html/* /var/www/html/antenna/
+sudo cp -r html/antenna/* /var/www/html/antenna/
 # Scripts
 sudo cp -r bin/* /usr/local/bin/antenna/
 # Configuración
