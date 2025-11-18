@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <title>Panel Radio 1</title>
+  <title>Panel Radio 2</title>
   <style>
     button {
       width: 150px;
@@ -25,20 +25,34 @@
 </head>
 <body>
   <h1>
-    Control de Antenas - Radio 1
+    Control de Antenas - Radio 2
     <button id="resetBtn">QRT</button>
   </h1>
 
   <div id="buttons"></div>
 
   <script>
-    const view = "R1";
+    const view = "R2";
+
+    // Función para invertir el diccionario PAIRS (R1->R2 → R2->R1)
+    function invertPairs(pairs) {
+      const inverted = {};
+      for (const key in pairs) {
+        inverted[pairs[key]] = key;
+      }
+      return inverted;
+    }
 
     function updateUI(data) {
       const container = document.getElementById("buttons");
       container.innerHTML = "";
       const group = data[view];
-      const pairs = data["PAIRS"];
+      const pairs = invertPairs(data["PAIRS"]); // ahora sí funciona
+
+      if (!group) {
+        container.innerHTML = "<p>No hay datos para " + view + "</p>";
+        return;
+      }
 
       for (const pin in group) {
         const btn = document.createElement("button");
@@ -47,7 +61,8 @@
 
         if (group[pin].state == 1) {
           btn.className = "active";
-        } else if (data["R2"][pairs[pin]].state == 1) {
+        } else if (data["R1"][pairs[pin]] && data["R1"][pairs[pin]].state == 1) {
+          // Bloqueo si el pin equivalente en R1 está activo
           btn.className = "blocked";
           btn.disabled = true;
         } else {
@@ -60,19 +75,19 @@
     }
 
     function toggleRelay(pin) {
-      fetch(`/cgi-bin/relay.cgi?pin=${pin}&view=${view}`)
+      fetch(`/cgi-bin/antenna/relay.cgi?pin=${pin}&view=${view}`)
         .then(r => r.json())
         .then(data => updateUI(data));
     }
 
-    // Acción del botón Reset R1
+    // Acción del botón Reset R2
     document.getElementById("resetBtn").onclick = () => {
-      fetch("/cgi-bin/gpio_reset_R1.cgi")
+      fetch("/cgi-bin/antenna/gpio_reset_R2.cgi")
         .then(r => r.json())
         .then(data => {
           console.log("Reset ejecutado:", data);
           // Refrescar estado tras el reset
-          fetch(`/cgi-bin/relay.cgi?view=${view}`)
+          fetch(`/cgi-bin/antenna/relay.cgi?view=${view}`)
             .then(r => r.json())
             .then(data => updateUI(data));
         });
@@ -80,13 +95,13 @@
 
     // Auto-refresh cada 2 segundos
     setInterval(() => {
-      fetch(`/cgi-bin/relay.cgi?view=${view}`)
+      fetch(`/cgi-bin/antenna/relay.cgi?view=${view}`)
         .then(r => r.json())
         .then(data => updateUI(data));
     }, 2000);
 
     // Cargar estado inicial
-    fetch(`/cgi-bin/relay.cgi?view=${view}`)
+    fetch(`/cgi-bin/antenna/relay.cgi?view=${view}`)
       .then(r => r.json())
       .then(data => updateUI(data));
   </script>

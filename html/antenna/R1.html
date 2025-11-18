@@ -60,19 +60,19 @@
     }
 
     function toggleRelay(pin) {
-      fetch(`/cgi-bin/relay.cgi?pin=${pin}&view=${view}`)
+      fetch(`/cgi-bin/antenna/relay.cgi?pin=${pin}&view=${view}`)
         .then(r => r.json())
         .then(data => updateUI(data));
     }
 
     // Acción del botón Reset R1
     document.getElementById("resetBtn").onclick = () => {
-      fetch("/cgi-bin/gpio_reset_R1.cgi")
+      fetch("/cgi-bin/antenna/gpio_reset_R1.cgi")
         .then(r => r.json())
         .then(data => {
           console.log("Reset ejecutado:", data);
           // Refrescar estado tras el reset
-          fetch(`/cgi-bin/relay.cgi?view=${view}`)
+          fetch(`/cgi-bin/antenna/relay.cgi?view=${view}`)
             .then(r => r.json())
             .then(data => updateUI(data));
         });
@@ -80,13 +80,13 @@
 
     // Auto-refresh cada 2 segundos
     setInterval(() => {
-      fetch(`/cgi-bin/relay.cgi?view=${view}`)
+      fetch(`/cgi-bin/antenna/relay.cgi?view=${view}`)
         .then(r => r.json())
         .then(data => updateUI(data));
     }, 2000);
 
     // Cargar estado inicial
-    fetch(`/cgi-bin/relay.cgi?view=${view}`)
+    fetch(`/cgi-bin/antenna/relay.cgi?view=${view}`)
       .then(r => r.json())
       .then(data => updateUI(data));
   </script>

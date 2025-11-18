@@ -2,7 +2,7 @@
 echo "Content-type: application/json"
 echo ""
 
-. /etc/gpio_config.sh
+. /etc/antenna/gpio_config.sh
 
 # Construir un mapa inverso de PAIRS (R2 -> R1)
 declare -A PAIRS_INV
