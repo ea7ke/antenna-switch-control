@@ -22,15 +22,15 @@ sudo mkdir -p /usr/share/doc/antenna
 # 3. Copiar archivos
 echo "[3/6] Copiando archivos..."
 # CGI
-sudo cp -r antenna/cgi-bin/* /usr/lib/cgi-bin/antenna/
+sudo cp -r cgi-bin/* /usr/lib/cgi-bin/antenna/
 # Web
-sudo cp -r antenna/html/* /var/www/html/antenna/
+sudo cp -r html/* /var/www/html/antenna/
 # Scripts
-sudo cp -r antenna/bin/* /usr/local/bin/antenna/
+sudo cp -r bin/* /usr/local/bin/antenna/
 # Configuración
-sudo cp -r antenna/config/* /etc/antenna/
+sudo cp -r etc/* /etc/antenna/
 # Documentación
-sudo cp -r antenna/docs/* /usr/share/doc/antenna/ || true
+# sudo cp -r antenna/docs/* /usr/share/doc/antenna/ || true
 
 # 4. Permisos
 echo "[4/6] Ajustando permisos..."
