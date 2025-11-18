@@ -49,20 +49,23 @@ sudo ./uninstall.sh
 
 ---
 
+
 ## 🎛️ Asignación de pines GPIO
 
-Cada botón físico de radio está conectado a un pin GPIO de la Raspberry Pi.  
-La configuración actual es:
+La configuración de antenas se define en `gpio.conf`.  
+Cada antena está asociada a un pin GPIO de R1 y emparejada con un pin de R2.
 
-| Radio | Botón | GPIO (BCM) | Pin físico |
-|-------|-------|------------|------------|
-| Radio 1 | Botón 1 | GPIO 17 | Pin 11 |
-| Radio 2 | Botón 2 | GPIO 27 | Pin 13 |
-| Radio 3 | Botón 3 | GPIO 22 | Pin 15 |
-| Radio 4 | Botón 4 | GPIO 23 | Pin 16 |
-| Radio 5 | Botón 5 | GPIO 24 | Pin 18 |
-| Radio 6 | Botón 6 | GPIO 25 | Pin 22 |
+| Antena        | GPIO R1 (BCM) | GPIO R2 (BCM) | Pin físico R1 | Pin físico R2 |
+|---------------|---------------|---------------|---------------|---------------|
+| 10m Yagi      | 2             | 8             | Pin 3         | Pin 24        |
+| 15m Yagi      | 3             | 9             | Pin 5         | Pin 21        |
+| 20m Yagi      | 4             | 10            | Pin 7         | Pin 19        |
+| 40m Dipolo    | 5             | 11            | Pin 29        | Pin 23        |
+| 80m Dipolo    | 6             | 12            | Pin 31        | Pin 32        |
+| 160m L Inv    | 7             | 13            | Pin 26        | Pin 33        |
 
+👉 Los números de **GPIO (BCM)** son los que usa el sistema.  
+👉 Los números de **Pin físico** corresponden al conector de 40 pines de la Raspberry Pi.  
 👉 Estos pines se pueden modificar en el archivo de configuración (`/etc/antenna/gpio.conf`).
 
 ---
