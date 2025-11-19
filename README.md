@@ -1,5 +1,6 @@
-Sistema de control de conmutador de antenas para Raspberry Pi.  
+Este desarrollo de software es un sistema de control para un conmutador de 6 antenas para 2 equipos de radio controlados desde una Raspberry Pi.  
 Permite seleccionar diferentes radios mediante botones físicos conectados a los pines GPIO y controlar relés desde una interfaz web.
+Para ello, además del conmutador de antenas, es necesario un par de módulos de reles para arduino/ESP/Rapsberry que son fácilmente localizables en webs tipo Aliexpress, Amaozon, etc...
 
 ---
 
