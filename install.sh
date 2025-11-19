@@ -53,17 +53,18 @@ sudo tee $APACHE_CONF > /dev/null <<EOL
 <VirtualHost *:80>
     ServerAdmin webmaster@localhost
     DocumentRoot /var/www/html/antenna
-
+    ServerName radio.local
     <Directory /var/www/html/antenna>
         Options Indexes FollowSymLinks
         AllowOverride None
         Require all granted
     </Directory>
 
-    ScriptAlias /cgi-bin/antenna/ /usr/lib/cgi-bin/antenna/
+    ScriptAlias /cgi-bin/ /usr/lib/cgi-bin/antenna/
     <Directory "/usr/lib/cgi-bin/antenna">
         AllowOverride None
         Options +ExecCGI -MultiViews +SymLinksIfOwnerMatch
+        AddHandler cgi-script .cgi
         Require all granted
     </Directory>
 
@@ -73,6 +74,7 @@ sudo tee $APACHE_CONF > /dev/null <<EOL
 EOL
 
 # Activar sitio y reiniciar Apache
+sudo a2enmod cgi
 sudo a2ensite antenna.conf
 sudo systemctl reload apache2
 
