@@ -89,7 +89,7 @@ http://<IP-de-tu-RPi>/cgi-bin/
 
 ## 🖼️ Esquema de conexión
 
-![Esquema GPIO](RPi3B-Pin-out.png)
+![Esquema GPIO](RPi3B-Pin-out-.jpg)
 
 *(Añade un diagrama en `docs/gpio-diagram.png` para mostrar la conexión de botones a GPIO y relés.)*
 
