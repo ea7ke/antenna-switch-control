@@ -83,6 +83,35 @@ echo "[6/6] Activando pigpio..."
 sudo systemctl enable pigpiod
 sudo systemctl start pigpiod
 
+# 7. Servicio para resetear GPIO al arranque
+echo "[7/7] Configurando servicio gpio_reset..."
+
+# Copiar el script de reset al sistema
+sudo cp bin/gpio_reset.sh /usr/local/bin/antenna/gpio_reset.sh
+sudo chmod +x /usr/local/bin/antenna/gpio_reset.sh
+sudo chown root:root /usr/local/bin/antenna/gpio_reset.sh
+
+# Crear unidad systemd
+GPIO_RESET_SERVICE="/etc/systemd/system/gpio-reset.service"
+
+sudo tee $GPIO_RESET_SERVICE > /dev/null <<EOL
+[Unit]
+Description=Reset GPIO pins for antenna control
+After=multi-user.target
+
+[Service]
+Type=oneshot
+ExecStart=/usr/local/bin/antenna/gpio_reset.sh
+RemainAfterExit=yes
+
+[Install]
+WantedBy=multi-user.target
+EOL
+
+# Habilitar servicio
+sudo systemctl enable gpio-reset.service
+
+
 echo "=== Instalación completada ✅ ==="
 echo "Web: http://<IP-de-tu-RPi>/"
 echo "CGI: http://<IP-de-tu-RPi>/cgi-bin/"
