@@ -115,3 +115,5 @@ sudo systemctl enable gpio-reset.service
 echo "=== Instalación completada ✅ ==="
 echo "Web: http://<IP-de-tu-RPi>/"
 echo "CGI: http://<IP-de-tu-RPi>/cgi-bin/"
+echo "Reiniciando..."
+sudo reboot
